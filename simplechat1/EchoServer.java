@@ -39,6 +39,58 @@ public class EchoServer extends AbstractServer
   
   //Instance methods ************************************************
   
+  //**** Changed for E50 - JS
+  public void handleMessageFromServerConsole(String input) throws IOException {
+    if(input.startsWith("#")) {
+      String[] message = input.split(" ");
+
+      if(input == "#quit") {
+        try {
+          close();
+        } catch (IOException e) {
+          System.exit(1);
+        }
+        System.exit(0);
+      }
+
+      if(input == "#stop") {
+        stopListening();
+      }
+
+      if(input == "#close") {
+        try {
+          close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+
+      if(input == "#setport") {
+        if(getNumberOfClients() == 0 && !isListening()) {
+          setPort(Integer.parseInt(message[1]));
+        } else {
+          System.out.println("Cannot set up new port.");
+        }
+      }
+
+      if(input == "#start") {
+        if(isListening()) {
+          System.out.println("It is already started.");
+        } else {
+          try {
+            listen();
+          } catch (IOException e){
+
+          }
+        }
+      }
+
+      if(input == "#getport") {
+        System.out.println(getPort());
+      }
+    }
+  }
+
   /**
    * This method handles any messages received from the client.
    *

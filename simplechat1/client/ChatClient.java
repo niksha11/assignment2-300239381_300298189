@@ -48,7 +48,75 @@ public class ChatClient extends AbstractClient
 
   
   //Instance methods ************************************************
-    
+  
+  
+  //**** Changed for E49 - JS
+  public void connectionClosed(){
+    System.out.println("Connection closed to server.");
+  }
+
+  //**** Changed for E49 - JS
+  public void connectionException(Exception exception){
+    System.out.println("The server has stopped listening for connection. Disconnecting.");
+    quit();
+  }
+
+  //**** Changed for E50 - JS
+  
+  public void handleMessageFromClientConsole(String input){
+    if(input.startsWith("#")) {
+      String[] message = input.split(" ");
+
+      if(input == "#quit") {
+        quit();
+      }
+
+      if(input == "#logoff") {
+        try {
+          closeConnection();
+        } catch(IOException e) {
+          System.out.println("Error in logging off.");
+        }
+      }
+
+      if(input == "#sethost") {
+        if(isConnected()) { 
+          System.out.println("You are already connected.");
+        } else {
+          setHost(message[1]);
+        }
+      }
+
+      if(input == "#setport") {
+        if(isConnected()) {
+          System.out.println("You are already connected.");
+        } else {
+          setPort(Integer.parseInt(message[1]));
+        }
+      }
+
+      if(input == "#login") {
+        if(isConnected()) {
+          System.out.println("You are already logged in");
+        } else {
+          try {
+            openConnection();
+          } catch(IOException e) {
+            System.out.println("Error logging in.");
+          }
+        }
+      }
+
+      if(input == "#gethost") {
+        System.out.println(getHost());
+      }
+
+      if(input == "#getport") {
+        System.out.println(getPort());
+      }
+    }
+  }
+
   /**
    * This method handles all data that comes in from the server.
    *
